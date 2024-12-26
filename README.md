@@ -1,4 +1,4 @@
-# prompt_pay_fyp
+# PROMPTPAY-ANDROID-APP
 
 A new Flutter project.
 
