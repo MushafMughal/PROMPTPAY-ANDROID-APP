@@ -1,0 +1,2 @@
+E:/flutter/app/prompt_pay/android/app/.cxx/RelWithDebInfo/69463m4s/x86_64/CMakeFiles/edit_cache.dir
+E:/flutter/app/prompt_pay/android/app/.cxx/RelWithDebInfo/69463m4s/x86_64/CMakeFiles/rebuild_cache.dir

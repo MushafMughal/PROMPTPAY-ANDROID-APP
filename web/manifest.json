@@ -1,6 +1,6 @@
 {
-    "name": "prompt_pay_fyp",
-    "short_name": "prompt_pay_fyp",
+    "name": "prompt_pay",
+    "short_name": "prompt_pay",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

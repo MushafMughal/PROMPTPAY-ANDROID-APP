@@ -1,0 +1,2 @@
+/Users/jeremybrown/Documents/prompt_pay/android/app/.cxx/Debug/3o1g39e6/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/jeremybrown/Documents/prompt_pay/android/app/.cxx/Debug/3o1g39e6/arm64-v8a/CMakeFiles/rebuild_cache.dir

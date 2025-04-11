@@ -1,0 +1,2 @@
+D:/Projects/prompt_pay/android/app/.cxx/RelWithDebInfo/6fm5o2qn/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/Projects/prompt_pay/android/app/.cxx/RelWithDebInfo/6fm5o2qn/arm64-v8a/CMakeFiles/rebuild_cache.dir
