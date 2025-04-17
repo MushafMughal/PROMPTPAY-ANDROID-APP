@@ -14,6 +14,9 @@ class ChangePassword extends StatefulWidget {
 
 class _ChangePasswordState extends State<ChangePassword> {
   final loginController = Get.put(LoginController());
+  final currentPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,14 +62,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                       () => CustomTextFieldWithlabel(
                         label: 'Current Password',
                         hintText: 'Current Password',
-                        obscureText: loginController.showPassword.value,
+                        obscureText: !loginController.showPassword.value,
                         prefixIconPath: 'assets/pngs/password_icon.png',
+                        controller: currentPasswordController,
                         suffixIcon: IconButton(
                           onPressed: () {
-                            loginController.toggleShowPassword();
+                            loginController.toggleCurrentPassword();
                           },
                           icon: Icon(
-                            loginController.showPassword.value
+                            loginController.currentPassword.value
                                 ? Icons.remove_red_eye
                                 : Icons.remove_red_eye_outlined,
                             color: const Color(0xffA2A2A7),
@@ -80,14 +84,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                       () => CustomTextFieldWithlabel(
                         label: 'New Password',
                         hintText: 'New Password',
-                        obscureText: loginController.showPassword.value,
+                        obscureText: !loginController.showPassword.value,
                         prefixIconPath: 'assets/pngs/password_icon.png',
+                        controller: newPasswordController,
                         suffixIcon: IconButton(
                           onPressed: () {
-                            loginController.toggleShowPassword();
+                            loginController.toggleNewPassword1();
                           },
                           icon: Icon(
-                            loginController.showPassword.value
+                            loginController.newPassword1.value
                                 ? Icons.remove_red_eye
                                 : Icons.remove_red_eye_outlined,
                             color: const Color(0xffA2A2A7),
@@ -101,14 +106,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                       () => CustomTextFieldWithlabel(
                         label: 'Confirm Password',
                         hintText: 'Confirm Password',
-                        obscureText: loginController.showPassword.value,
+                        obscureText: !loginController.showPassword.value,
                         prefixIconPath: 'assets/pngs/password_icon.png',
+                        controller: confirmPasswordController,
                         suffixIcon: IconButton(
                           onPressed: () {
-                            loginController.toggleShowPassword();
+                            loginController.toggleNewPassword2();
                           },
                           icon: Icon(
-                            loginController.showPassword.value
+                            loginController.newPassword2.value
                                 ? Icons.remove_red_eye
                                 : Icons.remove_red_eye_outlined,
                             color: const Color(0xffA2A2A7),
@@ -119,16 +125,21 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                     SizedBox(height: 40.h),
                     CustomButton(
-                      onTap: () {
-                        Get.back();
-                        Get.showSnackbar(
-                          const GetSnackBar(
-                            snackPosition: SnackPosition.TOP,
-                            message: 'Password Changed Successfully',
-                            duration: Duration(seconds: 2),
-                            backgroundColor: Color(0xff0066FF),
-                          ),
+                      onTap: () async {
+                        final res = await loginController.updatePassword(
+                          context: context,
+                          body: {
+                            'current password': currentPasswordController.text,
+                            'new password': newPasswordController.text,
+                            'confirm password': confirmPasswordController.text,
+                          },
                         );
+                        if (res?['status'] ?? false) {
+                          currentPasswordController.clear();
+                          newPasswordController.clear();
+                          confirmPasswordController.clear();
+                          setState(() {});
+                        }
                       },
                       text: 'Change Password',
                     ),

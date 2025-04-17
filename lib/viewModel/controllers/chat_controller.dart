@@ -9,6 +9,8 @@ class ChatController extends GetxController {
 
   final RxBool _isPromptPay = false.obs;
   RxBool get isPromptPay => _isPromptPay;
+  final RxBool _isControllerEmpty = true.obs;
+  RxBool get isControllerEmpty => _isControllerEmpty;
   final RxString _route = ''.obs;
   RxString get route => _route;
   Map<String, dynamic> _data = <String, dynamic>{};
@@ -86,46 +88,6 @@ class ChatController extends GetxController {
     );
     _messages.removeLast();
     if (res['status'] == true && res['message'] != null) {
-      addMessage(
-        ChatModel(
-          message: res['message'],
-          isSender: true,
-        ),
-      );
-    }
-  }
-
-  onSendPromptPayMessage({
-    required BuildContext context,
-  }) async {
-    if (_controller.value.text.isEmpty) return;
-    final text = _controller.value.text.trim();
-    addMessage(
-      ChatModel(
-        message: text,
-        isSender: false,
-      ),
-    );
-
-    _controller.value.clear();
-    addMessage(
-      const ChatModel(
-        message: '...',
-        isSender: true,
-      ),
-    );
-    final res = await ChatRepository().sendPromptPayMessage(
-      context: context,
-      body: {
-        'user_input': text,
-      },
-    );
-    _messages.removeLast();
-    if (res['status'] == true && res['message'] != null) {
-      if (res['data'] != null && res['next'] != null) {
-        _data = res['data'];
-        _route.value = res['next'];
-      }
       addMessage(
         ChatModel(
           message: res['message'],

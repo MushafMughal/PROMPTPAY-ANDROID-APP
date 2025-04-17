@@ -7,7 +7,11 @@ import 'package:prompt_pay/view/Dashboard/widgets/cards.dart';
 import 'package:prompt_pay/view/Dashboard/widgets/home.dart';
 import 'package:prompt_pay/view/Dashboard/widgets/settings.dart';
 import 'package:prompt_pay/view/Dashboard/widgets/transactions.dart';
+import 'package:prompt_pay/viewModel/controllers/account_controller.dart';
 import 'package:prompt_pay/viewModel/controllers/dashboard_controller.dart';
+import 'package:prompt_pay/viewModel/controllers/mastercard_controller.dart';
+import 'package:prompt_pay/viewModel/controllers/payees_controller.dart';
+import 'package:prompt_pay/viewModel/controllers/transaction_controller.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -18,6 +22,10 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final dashboardController = Get.put(DashboardController());
+  final accountController = Get.put(AccountController());
+  final cardController = Get.put(MastercardController);
+  final transactionController = Get.put(TransactionController());
+  final payeeController = Get.put(PayeesController());
   @override
   Widget build(BuildContext context) {
     final List<Widget> screens = <Widget>[

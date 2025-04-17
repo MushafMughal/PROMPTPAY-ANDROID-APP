@@ -25,21 +25,21 @@ class _SignupScreenState extends State<SignupScreen> {
         automaticallyImplyLeading: false,
         surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
-        title: GestureDetector(
-          onTap: () => Get.back(),
-          child: Container(
-            margin: EdgeInsets.only(left: 20.w, top: 20.h),
-            child: CircleAvatar(
-              radius: 21.h,
-              backgroundColor: const Color(0xffF4F4F4),
-              child: Icon(
-                Icons.arrow_back_ios_new,
-                size: 18.h,
-                color: const Color(0xff1E1E2D),
-              ),
-            ),
-          ),
-        ),
+        // title: GestureDetector(
+        //   onTap: () => Get.back(),
+        //   child: Container(
+        //     margin: EdgeInsets.only(left: 20.w, top: 20.h),
+        //     child: CircleAvatar(
+        //       radius: 21.h,
+        //       backgroundColor: const Color(0xffF4F4F4),
+        //       child: Icon(
+        //         Icons.arrow_back_ios_new,
+        //         size: 18.h,
+        //         color: const Color(0xff1E1E2D),
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -146,7 +146,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     CustomTextFieldWithlabel(
                       label: 'Cnic Number',
                       controller: sc.cnicController.value,
-                      hintText: '12345-1234567-1',
+                      hintText: '1234512345671',
                       obscureText: false,
                       prefixIconPath: 'assets/pngs/email_icon.png',
                     ),
@@ -154,7 +154,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     CustomTextFieldWithlabel(
                       label: 'Phone Number',
                       controller: sc.phoneController.value,
-                      hintText: '0000-0000-00',
+                      hintText: '+92xxxxxxxxxx',
                       obscureText: false,
                       prefixIconPath: 'assets/pngs/email_icon.png',
                     ),
@@ -178,7 +178,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         label: 'Password',
                         hintText: 'Password',
                         controller: sc.passwordController.value,
-                        obscureText: sc.showPassword.value,
+                        obscureText: !sc.showPassword.value,
                         prefixIconPath: 'assets/pngs/password_icon.png',
                         suffixIcon: IconButton(
                           onPressed: () {

@@ -19,6 +19,31 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final pc = Get.put(ProfileController());
   final accountController = Get.put(AccountController());
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
+  @override
+  void dispose() {
+    userNameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    userNameController = TextEditingController(
+      text: accountController.accountDetails['username'] ?? '',
+    );
+    emailController = TextEditingController(
+      text: accountController.accountDetails['email'] ?? '',
+    );
+    phoneController = TextEditingController(
+      text: accountController.accountDetails['phone_number'] ?? '',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,37 +146,63 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   20.verticalSpace,
                   CustomTextFieldWithlabel(
-                    label: 'Full Name',
-                    hintText: accountController.accountDetails['name'] ?? '',
+                    label: 'Usrname',
+                    hintText:
+                        accountController.accountDetails['username'] ?? '',
                     obscureText: false,
-                    controller: TextEditingController(
-                      text: accountController.accountDetails['name'] ?? '',
-                    ),
-                    isEnabled: false,
+                    controller: userNameController,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                   ),
                   CustomTextFieldWithlabel(
                     label: 'Phone Number',
                     hintText:
                         accountController.accountDetails['phone_number'] ?? '',
                     obscureText: false,
-                    controller: TextEditingController(
-                      text: accountController.accountDetails['phone_number'] ??
-                          '',
-                    ),
-                    isEnabled: false,
+                    controller: phoneController,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                   ),
                   CustomTextFieldWithlabel(
                     label: 'Email Address',
                     hintText: accountController.accountDetails['email'] ?? '',
                     obscureText: false,
-                    controller: TextEditingController(
-                      text: accountController.accountDetails['email'] ?? '',
-                    ),
-                    isEnabled: false,
+                    controller: emailController,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                   ),
-                  if (pc.profileImage != null)
+                  if (userNameController.text.trim() !=
+                          accountController.accountDetails['name']
+                              .toString()
+                              .trim() ||
+                      emailController.text.trim() !=
+                          accountController.accountDetails['email']
+                              .toString()
+                              .trim() ||
+                      phoneController.text.trim() !=
+                          accountController.accountDetails['phone_number']
+                              .toString()
+                              .trim())
                     CustomButton(
                       onTap: () {
+                        accountController.accountDetails['name'] =
+                            userNameController.text.trim();
+                        accountController.accountDetails['email'] =
+                            emailController.text.trim();
+                        accountController.accountDetails['phone_number'] =
+                            phoneController.text.trim();
+
+                        accountController.updateProfile(
+                          body: {
+                            'username': userNameController.text.trim(),
+                            'email': emailController.text.trim(),
+                            'phone number': phoneController.text.trim()
+                          },
+                          context: context,
+                        );
                         // pc.updateProfile();
                       },
                       text: 'Save Changes',

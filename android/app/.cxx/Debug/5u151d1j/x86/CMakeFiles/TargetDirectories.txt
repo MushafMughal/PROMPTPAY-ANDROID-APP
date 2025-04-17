@@ -1,2 +1,0 @@
-D:/Work/FYP/PROMPTPAY-ANDROID-APP/android/app/.cxx/Debug/5u151d1j/x86/CMakeFiles/edit_cache.dir
-D:/Work/FYP/PROMPTPAY-ANDROID-APP/android/app/.cxx/Debug/5u151d1j/x86/CMakeFiles/rebuild_cache.dir

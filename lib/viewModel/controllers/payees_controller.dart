@@ -61,4 +61,70 @@ class PayeesController extends GetxController {
       await getPayees(context: context);
     }
   }
+
+  sendMoney(
+      {required BuildContext context,
+      required Map<String, dynamic> body}) async {
+    if (body['account_number'].isEmpty) {
+      appSnackbar(
+        'Error',
+        'Account number cannot be empty',
+      );
+      return;
+    }
+    if (body['amount'].isEmpty) {
+      appSnackbar(
+        'Error',
+        'Amount cannot be empty',
+      );
+      return;
+    }
+    body['amount'] = double.parse(body['amount'].toString()).toStringAsFixed(2);
+    final res = await CoreRepositoryService().sendMoney(
+      context: context,
+      body: body,
+    );
+    if (res['status'] == true) {
+      return res;
+    } else {
+      appSnackbar('Error', res['message']);
+    }
+  }
+
+  verifyOtp(
+      {required BuildContext context,
+      required Map<String, dynamic> body}) async {
+    if (body['otp'].isEmpty) {
+      appSnackbar(
+        'Error',
+        'OTP cannot be empty',
+      );
+      return;
+    }
+
+    body['amount'] = double.parse(body['amount'].toString()).toStringAsFixed(2);
+    final res = await CoreRepositoryService().verifyOtp(
+      context: context,
+      body: body,
+    );
+    if (res['status'] == true) {
+      Get.back();
+      appSnackbar('Success', res['message']);
+      return res;
+    } else {
+      appSnackbar('Error', res['message']);
+    }
+  }
+
+  resendOtp({required BuildContext context}) async {
+    final res = await CoreRepositoryService().resendOtp(
+      context: context,
+    );
+    if (res['status'] == true) {
+      appSnackbar('Success', res['message']);
+      return res;
+    } else {
+      appSnackbar('Error', res['message']);
+    }
+  }
 }

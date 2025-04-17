@@ -90,8 +90,8 @@ class _TransactionHistoryWidgetState extends State<TransactionHistoryWidget> {
                           transactionController.transactionList[index]
                                       ['transaction_type'] ==
                                   'credit'
-                              ? '\$${transactionController.transactionList[index]['amount']}'
-                              : '- \$${transactionController.transactionList[index]['amount']}',
+                              ? '${transactionController.transactionList[index]['amount']}'
+                              : '- ${transactionController.transactionList[index]['amount']}',
                           style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,

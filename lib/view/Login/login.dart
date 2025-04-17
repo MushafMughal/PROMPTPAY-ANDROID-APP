@@ -24,21 +24,21 @@ class _LoginScreenState extends State<LoginScreen> {
         automaticallyImplyLeading: false,
         surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
-        title: GestureDetector(
-          onTap: () => Get.back(),
-          child: Container(
-            margin: EdgeInsets.only(left: 20.w, top: 20.h),
-            child: CircleAvatar(
-              radius: 21.h,
-              backgroundColor: const Color(0xffF4F4F4),
-              child: Icon(
-                Icons.arrow_back_ios_new,
-                size: 18.h,
-                color: const Color(0xff1E1E2D),
-              ),
-            ),
-          ),
-        ),
+        // title: GestureDetector(
+        //   onTap: () => Get.back(),
+        //   child: Container(
+        //     margin: EdgeInsets.only(left: 20.w, top: 20.h),
+        //     child: CircleAvatar(
+        //       radius: 21.h,
+        //       backgroundColor: const Color(0xffF4F4F4),
+        //       child: Icon(
+        //         Icons.arrow_back_ios_new,
+        //         size: 18.h,
+        //         color: const Color(0xff1E1E2D),
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         label: 'Password',
                         hintText: 'Password',
                         controller: loginController.passwordController.value,
-                        obscureText: loginController.showPassword.value,
+                        obscureText: !loginController.showPassword.value,
                         prefixIconPath: 'assets/pngs/password_icon.png',
                         suffixIcon: IconButton(
                           onPressed: () {
@@ -141,6 +141,7 @@ class CustomTextFieldWithlabel extends StatelessWidget {
     this.prefixIconPath = '',
     this.suffixIcon,
     this.ontap,
+    this.onChanged,
     this.isEnabled = true,
   });
   final String label;
@@ -150,6 +151,7 @@ class CustomTextFieldWithlabel extends StatelessWidget {
   final String prefixIconPath;
   final Widget? suffixIcon;
   final VoidCallback? ontap;
+  final void Function(String)? onChanged;
   final bool isEnabled;
 
   @override
@@ -168,6 +170,7 @@ class CustomTextFieldWithlabel extends StatelessWidget {
         SizedBox(
           height: 38.h,
           child: TextField(
+            onChanged: onChanged,
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w400,

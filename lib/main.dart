@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:prompt_pay/routes/routes.dart';
+import 'package:prompt_pay/widgets/lifecycle_watcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,19 +16,21 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(375, 787),
       builder: (_, child) {
-        return GetMaterialApp(
-          theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.white,
-              surfaceTintColor: Colors.white,
+        return LifecycleWatcher(
+          child: GetMaterialApp(
+            theme: ThemeData(
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Colors.white,
+                surfaceTintColor: Colors.white,
+              ),
+              scaffoldBackgroundColor: Colors.white,
+              fontFamily: 'Poppins',
+              primaryColor: const Color(0xff0066FF),
             ),
-            scaffoldBackgroundColor: Colors.white,
-            fontFamily: 'Poppins',
-            primaryColor: const Color(0xff0066FF),
+            debugShowCheckedModeBanner: false,
+            initialRoute: Routes.splash,
+            getPages: getPages,
           ),
-          debugShowCheckedModeBanner: false,
-          initialRoute: Routes.splash,
-          getPages: getPages,
         );
       },
     );

@@ -22,5 +22,6 @@ Future<void> clearAllDataFromStorage() async {
 
 class StorageKey {
   static const String token = 'TOKEN';
+  static const String refreshToken = 'REFRESH_TOKEN';
   static String onboardingDone = 'ONBOARDING_DONE';
 }

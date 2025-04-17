@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:prompt_pay/utils/helper.dart';
 import 'package:prompt_pay/view/Onboarding/onboarding.dart';
 import 'package:prompt_pay/viewModel/controllers/account_controller.dart';
 import 'package:prompt_pay/viewModel/controllers/dashboard_controller.dart';
@@ -15,79 +16,53 @@ class Cards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dashboardController = Get.put(DashboardController());
-    final accountController = Get.put(AccountController());
-    final MastercardController cardController = Get.find();
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          pinned: true,
-          automaticallyImplyLeading: false,
-          toolbarHeight: kTextTabBarHeight + 30.h,
-          title: Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  dashboardController.resetIndex();
-                },
-                child: CircleWithIcon(
-                  icon: const Icon(Icons.arrow_back_ios_new),
-                  radius: 21.r,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                'Card Details',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xff1E1E2D),
-                ),
-              ),
-              const Spacer(),
-            ],
-          ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(
-                right: 40.w,
+    final dashboardController = Get.find<DashboardController>();
+    final accountController = Get.find<AccountController>();
+    final cardController = Get.find<MastercardController>();
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                dashboardController.resetIndex();
+              },
+              child: CircleWithIcon(
+                icon: const Icon(Icons.arrow_back_ios_new),
+                radius: 21.r,
               ),
             ),
+            const Spacer(),
+            Text(
+              'Card Details',
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w500,
+                color: const Color(0xff1E1E2D),
+              ),
+            ),
+            const Spacer(),
           ],
         ),
-        SliverToBoxAdapter(
-          child: Padding(
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(
+              right: 40.w,
+            ),
+          ),
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async => Helper.onRefresh(context: context),
+        child: SingleChildScrollView(
+          child: Container(
+            height: 0.8.sh,
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 20.h,
               children: [
                 const CustomMasterCard(),
-                // TransactionHistoryWidget(
-                //   transactionDetailsList: [
-                //     TransactionDetailModel(
-                //       serviceIcon: 'assets/pngs/apple_icon.png',
-                //       serviceName: 'Apple',
-                //       subtitle: 'Entertainment',
-                //       type: TransactionType.received,
-                //       amount: '10.00',
-                //     ),
-                //     TransactionDetailModel(
-                //       serviceIcon: 'assets/pngs/apple_icon.png',
-                //       serviceName: 'Google',
-                //       subtitle: 'Entertainment',
-                //       type: TransactionType.sent,
-                //       amount: '10.00',
-                //     ),
-                //     TransactionDetailModel(
-                //       serviceIcon: 'assets/pngs/apple_icon.png',
-                //       serviceName: 'Facebook',
-                //       subtitle: 'Entertainment',
-                //       type: TransactionType.received,
-                //       amount: '10.00',
-                //     ),
-                //   ],
-                // ),
                 10.h.verticalSpace,
                 Text(
                   'Monthly spending limit',
@@ -133,7 +108,7 @@ class Cards extends StatelessWidget {
                         ),
                         child: Obx(
                           () => SfSlider(
-                            edgeLabelPlacement: EdgeLabelPlacement.auto,
+                            edgeLabelPlacement: EdgeLabelPlacement.inside,
                             showLabels: true,
                             labelFormatterCallback:
                                 (actualValue, formattedText) {
@@ -162,7 +137,6 @@ class Cards extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 Obx(
                   () => CustomButton(
                     text: 'Save',
@@ -178,7 +152,7 @@ class Cards extends StatelessWidget {
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

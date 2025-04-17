@@ -97,14 +97,14 @@ class _ChatScreenState extends State<ChatScreen> {
         appBar: AppBar(
           // toolbarHeight: kBottomNavigationBarHeight - 25.h,
           backgroundColor: Colors.white,
-          leading: Column(
-            // mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // const Spacer(),
-              Image.asset('assets/pngs/tabler_menu.png'),
-            ],
-          ),
+          // leading: Column(
+          //   // mainAxisSize: MainAxisSize.min,
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     // const Spacer(),
+          //     Image.asset('assets/pngs/tabler_menu.png'),
+          //   ],
+          // ),
           actions: [
             Obx(
               () => chatController.messages.isNotEmpty
@@ -283,7 +283,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   onTap: () async {
                                     chatController.controller.value.text =
                                         'I Need to transfer funds to someone?';
-                                    chatController
+                                    await chatController
                                         .onSendPromptPayMessageWithRoute(
                                             context: context);
                                     // chatController.addMessage(
@@ -338,25 +338,30 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                 ),
                                 GestureDetector(
-                                  onTap: () {
-                                    chatController.addMessage(
-                                      const ChatModel(
-                                        isSender: false,
-                                        message:
-                                            'I Need to pay my electricity bill?',
-                                      ),
-                                    );
-                                    //delayed response
-                                    Future.delayed(const Duration(seconds: 1),
-                                        () {
-                                      chatController.addMessage(
-                                        const ChatModel(
-                                          isSender: true,
-                                          message:
-                                              'This is an automated message from PromptPay',
-                                        ),
-                                      );
-                                    });
+                                  onTap: () async {
+                                    chatController.controller.value.text =
+                                        'I Need to pay my electricity bill?';
+                                    await chatController
+                                        .onSendPromptPayMessageWithRoute(
+                                            context: context);
+                                    // chatController.addMessage(
+                                    //   const ChatModel(
+                                    //     isSender: false,
+                                    //     message:
+                                    //         'I Need to pay my electricity bill?',
+                                    //   ),
+                                    // );
+                                    // //delayed response
+                                    // Future.delayed(const Duration(seconds: 1),
+                                    //     () {
+                                    //   chatController.addMessage(
+                                    //     const ChatModel(
+                                    //       isSender: true,
+                                    //       message:
+                                    //           'This is an automated message from PromptPay',
+                                    //     ),
+                                    //   );
+                                    // });
                                   },
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
@@ -392,25 +397,30 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                 ),
                                 GestureDetector(
-                                  onTap: () {
-                                    chatController.addMessage(
-                                      const ChatModel(
-                                        isSender: false,
-                                        message:
-                                            'I want to change my app password?',
-                                      ),
-                                    );
-                                    //delayed response
-                                    Future.delayed(const Duration(seconds: 1),
-                                        () {
-                                      chatController.addMessage(
-                                        const ChatModel(
-                                          isSender: true,
-                                          message:
-                                              'This is an automated message from PromptPay',
-                                        ),
-                                      );
-                                    });
+                                  onTap: () async {
+                                    chatController.controller.value.text =
+                                        'I want to change my app password?';
+                                    await chatController
+                                        .onSendPromptPayMessageWithRoute(
+                                            context: context);
+                                    // chatController.addMessage(
+                                    //   const ChatModel(
+                                    //     isSender: false,
+                                    //     message:
+                                    //         'I want to change my app password?',
+                                    //   ),
+                                    // );
+                                    // //delayed response
+                                    // Future.delayed(const Duration(seconds: 1),
+                                    //     () {
+                                    //   chatController.addMessage(
+                                    //     const ChatModel(
+                                    //       isSender: true,
+                                    //       message:
+                                    //           'This is an automated message from PromptPay',
+                                    //     ),
+                                    //   );
+                                    // });
                                   },
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
@@ -461,11 +471,19 @@ class _ChatScreenState extends State<ChatScreen> {
                                 onTapOutside: (event) => FocusManager
                                     .instance.primaryFocus
                                     ?.unfocus(),
+                                onChanged: (value) {
+                                  if (value.isEmpty) {
+                                    chatController.isControllerEmpty.value =
+                                        true;
+                                    chatController.update();
+                                  } else {
+                                    chatController.isControllerEmpty.value =
+                                        false;
+                                    chatController.update();
+                                  }
+                                },
                                 keyboardType: TextInputType.multiline,
                                 controller: chatController.controller.value,
-                                onChanged: (value) {
-                                  chatController.updateController(value);
-                                },
                                 cursorColor: const Color(0xff0066FF),
                                 decoration: InputDecoration(
                                   alignLabelWithHint: false,
@@ -525,10 +543,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: chatController
-                                            .controller.value.text.isEmpty
-                                        ? Colors.grey
-                                        : const Color(0xff0066FF),
+                                    color:
+                                        chatController.isControllerEmpty.value
+                                            ? Colors.grey
+                                            : const Color(0xff0066FF),
                                     spreadRadius: 0.5,
                                     blurRadius: 3,
                                   ),
@@ -536,10 +554,9 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               child: Icon(
                                 Icons.arrow_upward_sharp,
-                                color:
-                                    chatController.controller.value.text.isEmpty
-                                        ? Colors.grey
-                                        : const Color(0xff0066FF),
+                                color: chatController.isControllerEmpty.value
+                                    ? Colors.grey
+                                    : const Color(0xff0066FF),
                               ),
                             ),
                           ),

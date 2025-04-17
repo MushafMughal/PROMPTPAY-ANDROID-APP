@@ -1,11 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:pinput/pinput.dart';
 import 'package:prompt_pay/view/Login/login.dart';
 import 'package:prompt_pay/view/Onboarding/onboarding.dart';
 import 'package:prompt_pay/viewModel/controllers/account_controller.dart';
 import 'package:prompt_pay/viewModel/controllers/payees_controller.dart';
+import 'package:prompt_pay/widgets/app_snackbar.dart';
 import 'package:prompt_pay/widgets/circle_with_icon.dart';
 import 'package:prompt_pay/widgets/custom_master_card.dart';
 
@@ -19,6 +23,7 @@ class SendMoney extends StatefulWidget {
 class _SendMoneyState extends State<SendMoney> {
   final payeesController = Get.put(PayeesController());
   final accountController = Get.put(AccountController());
+  final amountController = TextEditingController();
 
   void fetchPayees() async {
     await payeesController.getPayees(context: context);
@@ -348,7 +353,7 @@ class _SendMoneyState extends State<SendMoney> {
                                           color: Color(0xFFDCDDDD),
                                         ),
                                       ),
-                                      hintText: '000 0000 0000 0000',
+                                      hintText: '0000 0000 0000 00',
                                       hintStyle: TextStyle(
                                         fontSize: 14.sp,
                                         color: const Color(0xff7E848D),
@@ -366,28 +371,18 @@ class _SendMoneyState extends State<SendMoney> {
                                 ),
                               ],
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Enter Your Amount',
-                                  style: TextStyle(
-                                    fontSize: 11.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: const Color(0xff7E848D),
-                                  ),
-                                ),
-                                // Text(
-                                //   'Change Currency?',
-                                //   style: TextStyle(
-                                //     fontSize: 11.sp,
-                                //     fontWeight: FontWeight.w400,
-                                //     color: const Color(0xffFF3F60),
-                                //   ),
-                                // )
-                              ],
+                            6.h.verticalSpace,
+                            Text(
+                              'Enter Your Amount',
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                fontWeight: FontWeight.w400,
+                                color: const Color(0xff7E848D),
+                              ),
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'PKR',
@@ -401,13 +396,18 @@ class _SendMoneyState extends State<SendMoney> {
                                 SizedBox(
                                   width: 0.5.sw,
                                   child: TextField(
+                                    controller: amountController,
                                     keyboardType: TextInputType.number,
-                                    decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.zero,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          EdgeInsets.only(top: -10.h),
                                       border: InputBorder.none,
                                       fillColor: Colors.white,
                                       hintText: '00.00',
-                                      hintStyle: TextStyle(
+                                      hintStyle: const TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.w600,
                                         color: Color(0xff9BB2D4),
@@ -430,13 +430,153 @@ class _SendMoneyState extends State<SendMoney> {
                   ),
                   10.h.verticalSpace,
                   CustomButton(
-                    onTap: () {
-                      Future.delayed(
-                        const Duration(milliseconds: 500),
-                        () {
-                          // Get.offAllNamed(Routes.dashboard);
-                        },
-                      );
+                    onTap: () async {
+                      try {
+                        final res = await payeesController.sendMoney(
+                          context: context,
+                          body: {
+                            'account_number': accountNumber,
+                            'amount': amountController.text,
+                          },
+                        );
+                        if (res['status']) {
+                          appSnackbar('Success', res['message']);
+                          final pinController = TextEditingController();
+                          final pinputFocusNode = FocusNode();
+                          pinputFocusNode.requestFocus();
+                          Get.defaultDialog(
+                            radius: 6.r,
+                            titlePadding: EdgeInsets.only(
+                                top: 30.h, bottom: 0, left: 60.w, right: 60.w),
+                            backgroundColor: Colors.white,
+                            title: 'Enter your verification code',
+                            titleStyle: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                            ),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 50.w),
+                            content: Column(
+                              children: [
+                                Text(
+                                  'We sent a verification code to ${accountController.accountDetails['email']}.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 10.sp,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                10.h.verticalSpace,
+                                Image.asset(
+                                  'assets/pngs/verification-code-image.png',
+                                ),
+                                10.h.verticalSpace,
+                                Pinput(
+                                  // You can pass your own SmsRetriever implementation based on any package
+                                  // in this example we are using the SmartAuth
+                                  length: 5,
+                                  controller: pinController,
+                                  focusNode: pinputFocusNode,
+                                  separatorBuilder: (index) =>
+                                      SizedBox(width: 4.w),
+                                  hapticFeedbackType:
+                                      HapticFeedbackType.lightImpact,
+
+                                  cursor: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 9),
+                                        width: 22,
+                                        height: 1,
+                                        color: Colors.black,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                6.h.verticalSpace,
+                                SizedBox(
+                                  height: 26.h,
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 10.w,
+                                        vertical: 0,
+                                      ),
+                                      backgroundColor: const Color(0xff0066FF),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24.r),
+                                        side: const BorderSide(
+                                          color: Color(0xff0066FF),
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Verify',
+                                      style: TextStyle(
+                                        fontSize: 10.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      final res =
+                                          await payeesController.verifyOtp(
+                                        context: context,
+                                        body: {
+                                          'otp': pinController.text,
+                                          'account_number': accountNumber,
+                                          'amount': amountController.text,
+                                        },
+                                      );
+                                      if (res?['status'] ?? false) {
+                                        accountNumber = '';
+                                        amountController.clear();
+                                        pinController.clear();
+                                        setState(() {});
+                                      } else {
+                                        appSnackbar(
+                                          'Error',
+                                          res?['message'] ??
+                                              'Verification failed',
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await payeesController.resendOtp(
+                                        context: context);
+                                  },
+                                  child: Container(
+                                    width: double.maxFinite,
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 6.h),
+                                    child: Text(
+                                      'Send the code again',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 10.sp,
+                                        color: Colors.black45,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        if (kDebugMode) {
+                          print('Error sending money: $e');
+                        }
+                      }
                     },
                     text: 'Send Money',
                   ),

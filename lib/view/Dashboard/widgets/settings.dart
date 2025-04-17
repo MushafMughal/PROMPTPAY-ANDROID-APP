@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:prompt_pay/routes/routes.dart';
+import 'package:prompt_pay/storage/storage.dart';
 import 'package:prompt_pay/viewModel/controllers/dashboard_controller.dart';
+import 'package:prompt_pay/viewModel/controllers/logout_controller.dart';
 import 'package:prompt_pay/viewModel/controllers/setting_controller.dart';
 import 'package:prompt_pay/widgets/circle_with_icon.dart';
 
@@ -52,8 +54,10 @@ class _SettingsScreensState extends State<SettingsScreens> {
             ),
             actions: [
               GestureDetector(
-                onTap: () {
-                  Get.offAllNamed(Routes.login);
+                onTap: () async {
+                  // await deleteDataFromStorage(StorageKey.token);
+                  final logoutController = Get.put(LogoutController());
+                  await logoutController.onLogout(context: context);
                 },
                 child: Padding(
                   padding: EdgeInsets.only(

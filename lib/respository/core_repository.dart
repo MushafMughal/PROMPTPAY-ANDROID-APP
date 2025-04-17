@@ -67,6 +67,72 @@ class CoreRepositoryService {
     }
   }
 
+  Future<dynamic> updateProfile({
+    required Map<String, dynamic> body,
+    required BuildContext context,
+  }) async {
+    final res = await network.postApi(
+      url: AppUrl.updateAccount,
+      context: context,
+      body: body,
+      sendHeaders: true,
+      showLoader: true,
+      showSnackbar: true,
+    );
+    if (res != null) {
+      return res;
+    }
+  }
+
+  Future<dynamic> sendMoney({
+    required Map<String, dynamic> body,
+    required BuildContext context,
+  }) async {
+    final res = await network.postApi(
+      url: AppUrl.sendMoney,
+      context: context,
+      body: body,
+      sendHeaders: true,
+      showLoader: true,
+      showSnackbar: true,
+    );
+    if (res != null) {
+      return res;
+    }
+  }
+
+  Future<dynamic> verifyOtp({
+    required Map<String, dynamic> body,
+    required BuildContext context,
+  }) async {
+    final res = await network.postApi(
+      url: AppUrl.verifyOtp,
+      context: context,
+      body: body,
+      sendHeaders: true,
+      showLoader: true,
+      showSnackbar: true,
+    );
+    if (res != null) {
+      return res;
+    }
+  }
+
+  Future<dynamic> resendOtp({
+    required BuildContext context,
+  }) async {
+    final res = await network.postApi(
+      url: AppUrl.resendOtp,
+      context: context,
+      sendHeaders: true,
+      showLoader: true,
+      showSnackbar: true,
+    );
+    if (res != null) {
+      return res;
+    }
+  }
+
   Future<dynamic> updateCardLimit({
     required Map<String, dynamic> body,
     required BuildContext context,
